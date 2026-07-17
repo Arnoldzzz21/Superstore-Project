@@ -135,9 +135,14 @@ body{
 }
 .filter-group{
   display:flex;flex-direction:column;gap:6px;
-  padding-right:22px;border-right:1px solid var(--line);
+  padding:10px 16px;margin-right:6px;
+  border:1.5px solid var(--line);border-radius:10px;
+  background:var(--card);
 }
-.filter-group:last-of-type{border-right:none;padding-right:0;}
+.filter-group.fg-region{border-color:var(--blue);background:var(--blue-bg);}
+.filter-group.fg-segment{border-color:var(--green);background:var(--green-bg);}
+.filter-group.fg-category{border-color:var(--purple);background:var(--purple-bg);}
+.filter-group.fg-ship{border-color:var(--orange);background:var(--orange-bg);}
 .filter-group .fg-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
 .dropdown{
   font-family:var(--body);font-size:12.8px;font-weight:500;color:var(--ink);
@@ -148,6 +153,31 @@ body{
 }
 .dropdown:hover{border-color:var(--blue);}
 .dropdown:focus{outline:2px solid var(--blue);outline-offset:1px;}
+
+/* -------- Multi-select slicers -------- */
+.multiselect{position:relative;}
+.ms-toggle{
+  font-family:var(--body);font-size:12.8px;font-weight:500;color:var(--ink);
+  background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%235b6472" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:8px;
+  padding:8px 30px 8px 12px;min-width:150px;max-width:210px;cursor:pointer;text-align:left;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ms-toggle:hover{border-color:var(--blue);}
+.ms-toggle.active{font-weight:700;border-color:var(--blue);color:var(--blue);}
+.ms-panel{
+  display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:30;
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 10px 28px rgba(17,24,39,.16);
+  min-width:200px;max-height:230px;overflow-y:auto;padding:6px;
+}
+.ms-panel.open{display:block;}
+.ms-option{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 8px;border-radius:6px;font-size:12.6px;cursor:pointer;color:var(--ink);
+}
+.ms-option:hover{background:var(--page);}
+.ms-option input{accent-color:var(--blue);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
 .reset-btn{
   margin-left:auto;align-self:center;
   background:transparent;border:1px solid var(--line);color:var(--ink-dim);
@@ -290,10 +320,30 @@ footer a:hover{color:var(--blue);border-color:var(--blue);}
     </div>
 
     <div class="filters">
-      <div class="filter-group"><label class="fg-label" for="select-region">Region</label><select id="select-region" class="dropdown"></select></div>
-      <div class="filter-group"><label class="fg-label" for="select-segment">Segment</label><select id="select-segment" class="dropdown"></select></div>
-      <div class="filter-group"><label class="fg-label" for="select-category">Category</label><select id="select-category" class="dropdown"></select></div>
-      <div class="filter-group"><label class="fg-label" for="select-ship">Ship Mode</label><select id="select-ship" class="dropdown"></select></div>
+      <div class="filter-group fg-region"><label class="fg-label">Region</label>
+        <div class="multiselect">
+          <button type="button" class="ms-toggle" id="ms-region-toggle">All Regions</button>
+          <div class="ms-panel" id="ms-region-panel"></div>
+        </div>
+      </div>
+      <div class="filter-group fg-segment"><label class="fg-label">Segment</label>
+        <div class="multiselect">
+          <button type="button" class="ms-toggle" id="ms-segment-toggle">All Segments</button>
+          <div class="ms-panel" id="ms-segment-panel"></div>
+        </div>
+      </div>
+      <div class="filter-group fg-category"><label class="fg-label">Category</label>
+        <div class="multiselect">
+          <button type="button" class="ms-toggle" id="ms-category-toggle">All Categories</button>
+          <div class="ms-panel" id="ms-category-panel"></div>
+        </div>
+      </div>
+      <div class="filter-group fg-ship"><label class="fg-label">Ship Mode</label>
+        <div class="multiselect">
+          <button type="button" class="ms-toggle" id="ms-ship-toggle">All Ship Modes</button>
+          <div class="ms-panel" id="ms-ship-panel"></div>
+        </div>
+      </div>
       <button class="reset-btn" id="resetBtn">Reset filters</button>
       <div class="filter-status" id="filterStatus"></div>
     </div>
@@ -402,14 +452,14 @@ const CLUSTER_NAMES = { 0:'Everyday Orders', 1:'Bulk Buyers', 2:'Flagship Deals'
 const CLUSTER_COLORS = { 0:'#2F80ED', 1:'#20A567', 2:'#8E44AD', 3:'#E74C3C' };
 
 /* ============ Filter state ============ */
-const state = { region:'', segment:'', category:'', ship:'', cluster:new Set(), subcat:new Set() };
+const state = { region:new Set(), segment:new Set(), category:new Set(), ship:new Set(), cluster:new Set(), subcat:new Set() };
 
 function filteredRows(){
   return ROWS.filter(r=>
-    (!state.region || r.region===state.region) &&
-    (!state.segment || r.segment===state.segment) &&
-    (!state.category || r.category===state.category) &&
-    (!state.ship || r.ship===state.ship) &&
+    (state.region.size===0 || state.region.has(r.region)) &&
+    (state.segment.size===0 || state.segment.has(r.segment)) &&
+    (state.category.size===0 || state.category.has(r.category)) &&
+    (state.ship.size===0 || state.ship.has(r.ship)) &&
     (state.cluster.size===0 || state.cluster.has(r.cluster)) &&
     (state.subcat.size===0 || state.subcat.has(r.subcat))
   );
@@ -431,12 +481,47 @@ function corr(xs, ys){
   return dx===0||dy===0 ? 0 : num/Math.sqrt(dx*dy);
 }
 
-/* ============ Dropdown filters ============ */
-function buildSelect(id, values, key, allLabel){
-  const el = document.getElementById(id);
-  el.innerHTML = `<option value="">${allLabel}</option>` + values.map(v=>`<option value="${v}">${v}</option>`).join('');
-  el.addEventListener('change', ()=>{ state[key] = el.value; render(); });
+/* ============ Multi-select slicer filters ============ */
+function updateMsToggleLabel(key, toggle, allLabel, total){
+  const n = state[key].size;
+  if(n===0) toggle.textContent = allLabel;
+  else if(n===1) toggle.textContent = [...state[key]][0];
+  else toggle.textContent = n+' selected';
+  toggle.classList.toggle('active', n>0);
 }
+
+function closeAllMsPanels(except){
+  document.querySelectorAll('.ms-panel.open').forEach(p=>{ if(p!==except) p.classList.remove('open'); });
+}
+
+function buildMultiSelect(key, values, allLabel, toggleId, panelId){
+  const toggle = document.getElementById(toggleId);
+  const panel = document.getElementById(panelId);
+
+  panel.innerHTML = values.map(v=>`
+    <label class="ms-option"><input type="checkbox" value="${v}"><span>${v}</span></label>
+  `).join('');
+
+  panel.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) state[key].add(cb.value);
+      else state[key].delete(cb.value);
+      updateMsToggleLabel(key, toggle, allLabel, values.length);
+      render();
+    });
+  });
+
+  toggle.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    closeAllMsPanels(panel);
+    panel.classList.toggle('open');
+  });
+  panel.addEventListener('click', (e)=> e.stopPropagation());
+
+  updateMsToggleLabel(key, toggle, allLabel, values.length);
+}
+
+document.addEventListener('click', ()=>{ closeAllMsPanels(null); });
 
 /* ============ Charts ============ */
 let scatterChart, subcatChart, clusterChart, simChart, coefChart;
@@ -609,10 +694,10 @@ function updateInsights(rows){
 
 function updateFilterStatus(rows){
   const parts = [];
-  if(state.region) parts.push(`Region: ${state.region}`);
-  if(state.segment) parts.push(`Segment: ${state.segment}`);
-  if(state.category) parts.push(`Category: ${state.category}`);
-  if(state.ship) parts.push(`Ship Mode: ${state.ship}`);
+  if(state.region.size) parts.push(`Region: ${[...state.region].join(', ')}`);
+  if(state.segment.size) parts.push(`Segment: ${[...state.segment].join(', ')}`);
+  if(state.category.size) parts.push(`Category: ${[...state.category].join(', ')}`);
+  if(state.ship.size) parts.push(`Ship Mode: ${[...state.ship].join(', ')}`);
   if(state.cluster.size) parts.push(`Cluster: ${[...state.cluster].map(c=>CLUSTER_NAMES[c]).join(', ')}`);
   if(state.subcat.size) parts.push(`Sub-Category: ${[...state.subcat].join(', ')}`);
   const el = document.getElementById('filterStatus');
@@ -648,17 +733,18 @@ function render(){
 
 /* ============ Init ============ */
 function init(){
-  buildSelect('select-region', L.regions, 'region', 'All Regions');
-  buildSelect('select-segment', L.segments, 'segment', 'All Segments');
-  buildSelect('select-category', L.categories, 'category', 'All Categories');
-  buildSelect('select-ship', L.shipmodes, 'ship', 'All Ship Modes');
+  buildMultiSelect('region', L.regions, 'All Regions', 'ms-region-toggle', 'ms-region-panel');
+  buildMultiSelect('segment', L.segments, 'All Segments', 'ms-segment-toggle', 'ms-segment-panel');
+  buildMultiSelect('category', L.categories, 'All Categories', 'ms-category-toggle', 'ms-category-panel');
+  buildMultiSelect('ship', L.shipmodes, 'All Ship Modes', 'ms-ship-toggle', 'ms-ship-panel');
 
   document.getElementById('resetBtn').addEventListener('click', ()=>{
-    state.region=''; state.segment=''; state.category=''; state.ship='';
-    state.cluster.clear(); state.subcat.clear();
-    ['select-region','select-segment','select-category','select-ship'].forEach(id=>{
-      document.getElementById(id).value = '';
-    });
+    ['region','segment','category','ship','cluster','subcat'].forEach(k=> state[k].clear());
+    document.querySelectorAll('.ms-panel input[type=checkbox]').forEach(cb=> cb.checked=false);
+    updateMsToggleLabel('region', document.getElementById('ms-region-toggle'), 'All Regions', L.regions.length);
+    updateMsToggleLabel('segment', document.getElementById('ms-segment-toggle'), 'All Segments', L.segments.length);
+    updateMsToggleLabel('category', document.getElementById('ms-category-toggle'), 'All Categories', L.categories.length);
+    updateMsToggleLabel('ship', document.getElementById('ms-ship-toggle'), 'All Ship Modes', L.shipmodes.length);
     render();
   });
 
