@@ -1,4 +1,8 @@
-Superstore Project
-This project analyzes the Superstore dataset to evaluate sales, profit, customer segments, product categories, and regional performance. The objective is to identify business trends, profitability drivers, and opportunities to improve sales and operational decisions using Python, Pandas, Matplotlib, and Seaborn.
+# Superstore Sales & Profitability Analysis
+
+## Project Objective
+"The objective of this project is to analyze the Sample Superstore dataset to identify the key factors affecting profitability. The analysis combines Exploratory Data Analysis (EDA), Customer Segmentation using K-Means Clustering, and a Linear Regression model to explain and predict profit based on business variables."
+
+The insights obtained are later presented in an interactive dashboard to support business decision-making.
 ## Live Dashboard
 View it here: https://arnoldzzz21.github.io/Superstore-Project/dashboardsuperstore.html
