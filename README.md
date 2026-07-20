@@ -1,11 +1,6 @@
 # Superstore Sales & Profitability Analysis
 
-## Project Objective
-"The objective of this project is to analyze the Sample Superstore dataset to identify the key factors affecting profitability. The analysis combines Exploratory Data Analysis (EDA), Customer Segmentation using K-Means Clustering, and a Linear Regression model to explain and predict profit based on business variables."
-
-Objectives
-
-The main objectives of this project are:
+## The main objectives of this project are:
 
 Explore the Superstore sales dataset.
 Clean and prepare the data for analysis.
@@ -15,6 +10,7 @@ Build a Linear Regression model to explain Profit.
 Develop an interactive dashboard for business users.
 
 Project Workflow
+
 1. Data Preparation
 Loaded the dataset
 Inspected data quality
