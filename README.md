@@ -23,7 +23,6 @@ pip install -r requirements.txt
 ```bash
 jupyter notebook "Project Superstore.ipynb"
 ```
-Or skip straight to the results in the [live dashboard](https://arnoldzzz21.github.io/Superstore-Project/dashboardsuperstore.html).
 
 Project Workflow
 
