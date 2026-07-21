@@ -9,6 +9,22 @@ Segment transactions using K-Means Clustering.
 Build a Linear Regression model to explain Profit.
 Develop an interactive dashboard for business users.
 
+## How to run this project
+**Step 1 -- Clone the repository:**
+```bash
+git clone https://github.com/Arnoldzzz21/Superstore-Project.git
+cd Superstore-Project
+```
+**Step 2 -- Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+**Step 3 -- Open the notebook:**
+```bash
+jupyter notebook "Project Superstore.ipynb"
+```
+Or skip straight to the results in the [live dashboard](https://arnoldzzz21.github.io/Superstore-Project/dashboardsuperstore.html).
+
 Project Workflow
 
 1. Data Preparation
