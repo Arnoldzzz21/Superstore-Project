@@ -73,7 +73,7 @@ R² Score
 Mean Absolute Error (MAE)
 Regression Coefficients
 
-Although the model explains approximately 17% of Profit variability, it provides valuable business insights regarding the impact of discounts and sales on profitability.
+Although the model explains approximately 27.3% of Profit variability, it provides valuable business insights regarding the impact of discounts and sales on profitability.
 
 Business Recommendations
 
