@@ -385,7 +385,7 @@ footer{
       <div class="tile">
         <div class="tile-head"><i class="dot" style="background:var(--orange)"></i>Discount Simulation</div>
         <div class="chart-box"><canvas id="simChart"></canvas></div>
-        <div class="tile-caption">Current → No Discount on weakest sub-categories: <b>+67%</b> profit.</div>
+        <div class="tile-caption" id="simInsight">Current → No Discount on weakest sub-categories: <b>+67%</b> profit.</div>
       </div>
     </div>
 
@@ -600,8 +600,26 @@ function makeClusterScatter(rows){
   });
 }
 
-function makeSimChart(){
-  const data = AGG.discount_sim;
+function makeSimChart(rows){
+  const lossSubcats = AGG.subcat.filter(s=>s.Status==='Loss').map(s=>s['Sub-Category']);
+  const lossRows = rows.filter(r=>lossSubcats.includes(r.subcat));
+  const coefMap = {};
+  AGG.coefficients.forEach(c=> coefMap[c.Feature] = c.Coefficient);
+  const INTERCEPT = 35.02;
+  function predictTotal(discountFn){
+    let sum = 0;
+    lossRows.forEach(r=>{
+      const d = discountFn(r.discount);
+      sum += INTERCEPT + coefMap.Sales*r.sales + coefMap.Quantity*r.qty + coefMap.Discount*d;
+    });
+    return Math.round(sum);
+  }
+  const data = [
+    { Scenario:'Current',       Total_Profit: predictTotal(d=>d) },
+    { Scenario:'Discount -20%', Total_Profit: predictTotal(d=>Math.min(Math.max(d*0.8,0),0.8)) },
+    { Scenario:'Discount -40%', Total_Profit: predictTotal(d=>Math.min(Math.max(d*0.6,0),0.8)) },
+    { Scenario:'No Discount',   Total_Profit: predictTotal(()=>0) }
+  ];
   const ctx = document.getElementById('simChart');
   if(simChart) simChart.destroy();
   simChart = new Chart(ctx, {
@@ -615,6 +633,15 @@ function makeSimChart(){
       scales:{ y:{ title:{display:true,text:'Total Profit ($)'}, grid:{color:'#EEF1F6'} }, x:{ grid:{display:false} } }
     }
   });
+  const simCap = document.getElementById('simInsight');
+  if(simCap){
+    const current = data[0].Total_Profit, noDisc = data[3].Total_Profit;
+    const denom = Math.abs(current) > 1 ? Math.abs(current) : 1;
+    const pct = Math.round((noDisc-current)/denom*100);
+    simCap.innerHTML = lossRows.length
+      ? 'Current → No Discount on weakest sub-categories in view: <b>' + (pct>=0?'+':'') + pct + '%</b> profit.'
+      : 'No orders from the weakest sub-categories in the current filter.';
+  }
 }
 
 function makeCoefChart(){
@@ -724,6 +751,7 @@ function render(){
   updateInsights(rows);
   updateFilterStatus(rows);
   renderClusterTable(rows);
+  makeSimChart(rows);
 }
 
 /* ============ Init ============ */
@@ -743,7 +771,6 @@ function init(){
     render();
   });
 
-  makeSimChart();
   render();
 }
 document.addEventListener('DOMContentLoaded', init);
