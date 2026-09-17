@@ -1,4 +1,4 @@
-# Superstore Sales & Profitability Analysis
+# Superstore Sales Profitability Analysis
 
 ## The main objectives of this project are:
 
