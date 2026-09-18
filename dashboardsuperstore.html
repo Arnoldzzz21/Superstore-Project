@@ -394,7 +394,7 @@ footer{
         <ul class="kt-list">
           <li>High discounts are strongly associated with reduced profitability.</li>
           <li><b>Tables, Bookcases, Supplies</b> consistently lose money.</li>
-          <li><b>Discount Trap</b> cluster: 10% of orders, 67% avg. discount, the only loss-making segment.</li>
+          <li><b>Discount Trap</b> cluster: 9% of orders, 71% avg. discount, the only loss-making segment.</li>
           <li><b>Bulk-quantity orders</b> (a distinct cluster, ~1,637 transactions) are just as profitable as mid-size orders — buying in volume doesn't hurt margin when discounts stay moderate.</li>
           <li>Simulation suggests cutting discounts on weak sub-categories could lift profit <b>+67%</b> (a correlational estimate, not a guaranteed causal effect — recommended to validate with an A/B test before changing discount policy).</li>
           <li><b>Recommendation:</b> tighten discount limits, prioritize high-value segments.</li>
@@ -433,7 +433,7 @@ const ROWS = RAW_DATA.split(';').filter(Boolean).map(line=>{
   };
 });
 
-const CLUSTER_NAMES = { 0:'Everyday Orders', 1:'Bulk Buyers', 2:'Flagship Deals', 3:'Discount Trap' };
+const CLUSTER_NAMES = { 0:'Mid-Size Orders', 1:'Small Everyday Orders', 2:'Bulk-Quantity Orders', 3:'Discount Trap' };
 const CLUSTER_COLORS = { 0:'#2F80ED', 1:'#20A567', 2:'#8E44AD', 3:'#E74C3C' };
 
 /* ============ Filter state ============ */

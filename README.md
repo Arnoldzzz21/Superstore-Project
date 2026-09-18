@@ -48,13 +48,12 @@ Variable correlations
 
 K-Means Clustering was applied to group transactions according to purchasing behavior.
 
-The clustering process (K=4) identified:
+The clustering process (K=4) identified four segments:
 
-High-value customers
-Medium-value customers
-Bulk-quantity orders -- a distinct cluster (~1,637 transactions) that is just as profitable as mid-size orders, showing that buying in volume doesn't hurt margin when discounts stay moderate.
-High-discount transactions
-Loss-generating transactions (the "Discount Trap" segment)
+Mid-Size Orders -- moderate sales and discount levels, solid average profit.
+Small Everyday Orders -- the largest group by transaction count, lower average sales, still profitable.
+Bulk-Quantity Orders -- a distinct cluster (~1,637 transactions) that is just as profitable as Mid-Size Orders, showing that buying in volume doesn't hurt margin when discounts stay moderate.
+Discount Trap -- the only loss-making segment (~9% of orders, ~71% average discount).
 
 4. Linear Regression
 
