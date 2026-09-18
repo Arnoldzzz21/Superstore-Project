@@ -48,12 +48,13 @@ Variable correlations
 
 K-Means Clustering was applied to group transactions according to purchasing behavior.
 
-The clustering process identified:
+The clustering process (K=4) identified:
 
 High-value customers
 Medium-value customers
+Bulk-quantity orders -- a distinct cluster (~1,637 transactions) that is just as profitable as mid-size orders, showing that buying in volume doesn't hurt margin when discounts stay moderate.
 High-discount transactions
-Loss-generating transactions
+Loss-generating transactions (the "Discount Trap" segment)
 
 4. Linear Regression
 
@@ -79,10 +80,11 @@ Business Recommendations
 
 Based on the analysis, the following recommendations are proposed:
 
-Reduce excessive discounts on low-performing products.
+Reduce excessive discounts on low-performing products -- discounts are strongly associated with reduced profitability, though this is a correlational finding, not a proven causal effect.
 Review pricing strategies for unprofitable product categories.
 Focus marketing efforts on profitable customer segments.
 Use customer segmentation to personalize promotional campaigns.
+Validate any discount-reduction plan with an A/B test before rolling it out, since simulated profit gains are estimates based on historical correlations, not guarantees.
 Include additional business variables in future predictive models to improve accuracy.
 
 Conclusion
