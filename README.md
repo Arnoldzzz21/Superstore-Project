@@ -7,7 +7,6 @@ Clean and prepare the data for analysis.
 Identify profitability patterns across products and customers.
 Segment transactions using K-Means Clustering.
 Build a Linear Regression model to explain Profit.
-Develop an interactive dashboard for business users.
 
 ## How to run this project
 **Step 1 -- Clone the repository:**
@@ -89,5 +88,3 @@ Include additional business variables in future predictive models to improve acc
 Conclusion
 
 This project demonstrates how data analytics and machine learning can support business decision-making by identifying profitability drivers, customer segments, and pricing opportunities. While the Linear Regression model has limited predictive power, it successfully highlights the variables that most influence profit and provides actionable insights for improving overall business performance.
-
-The insights obtained are later presented in an interactive dashboard to support business decision-making.
