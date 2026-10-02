@@ -91,5 +91,3 @@ Conclusion
 This project demonstrates how data analytics and machine learning can support business decision-making by identifying profitability drivers, customer segments, and pricing opportunities. While the Linear Regression model has limited predictive power, it successfully highlights the variables that most influence profit and provides actionable insights for improving overall business performance.
 
 The insights obtained are later presented in an interactive dashboard to support business decision-making.
-## Live Dashboard
-View it here: https://arnoldzzz21.github.io/Superstore-Project/dashboardsuperstore.html
