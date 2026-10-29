@@ -20,8 +20,12 @@ pip install -r requirements.txt
 ```
 **Step 3 -- Open the notebook:**
 ```bash
-jupyter notebook "Project Superstore.ipynb"
+jupyter notebook Project_Superstore.ipynb
 ```
+
+## Full report
+
+A static PDF export of the notebook (code, charts and conclusions) is available here: [reports/Project_Superstore.pdf](reports/Project_Superstore.pdf)
 
 Project Workflow
 
@@ -61,6 +65,7 @@ A Linear Regression model was developed to predict Profit using:
 Sales
 Quantity
 Discount
+Category and Region (one-hot encoded)
 
 The model helps explain how each variable contributes to business profitability.
 
@@ -72,7 +77,7 @@ R² Score
 Mean Absolute Error (MAE)
 Regression Coefficients
 
-Although the model explains approximately 27.3% of Profit variability, it provides valuable business insights regarding the impact of discounts and sales on profitability.
+Although the model explains approximately 18% of Profit variability (R² = 0.18), it provides valuable business insights regarding the impact of discounts and sales on profitability.
 
 Business Recommendations
 
